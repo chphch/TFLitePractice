@@ -1,5 +1,5 @@
 import tensorflow as tf
-import matplotlib
+from matplotlib.pyplot import imsave
 
 
 mnist = tf.keras.datasets.mnist
@@ -18,13 +18,12 @@ model.compile(optimizer='adam',
         metrics=['accuracy'])
 
 model.fit(x_train, y_train, epochs=5)
-model.evaluate(x_test,  y_test, verbose=2)
 
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 tflite_model = converter.convert()
 
-with open('converted_model.tflite', 'wb') as f:
+with open('mnist.tflite', 'wb') as f:
     f.write(tflite_model)
 
-for i, image in enumerate(x_test):
-    matplotlib.image.imsave(f'images/{i}.png', image)
+for i, image in enumerate(x_test[:30]):
+    imsave(f'images/{i}.png', image)
